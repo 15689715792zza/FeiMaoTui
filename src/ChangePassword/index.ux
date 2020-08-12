@@ -1,0 +1,146 @@
+<template>
+  <div id="demo">
+      <div id="body">
+            <div class="logo" >
+              <text>旧密码:</text>
+              <input value="{{old2}}" onchange="getold"></input>
+            </div>
+            <div class="logo" >
+              <text>新密码:</text>
+              <input value="{{new}}" onchange="getnew"></input>
+            </div>
+            <text id="change" onclick="change">确认修改</text>
+        </div>   
+    </div>
+</template>
+<script>
+import prompt from '@system.prompt'
+import router from '@system.router'
+export default {
+  private:{
+    old1:'',
+    old2:'',
+    new:'',
+  },
+  change(){
+    console.log('99999999999'+this.old1)
+    console.log('00000000000'+this.old2)
+    console.log('5888888888'+this.new)
+    if(this.old1==this.old2){
+      if(this.old2!==this.new){
+        const query = this.$app.$def.bmob.Query('User')
+        query.set('id', this.$app.$def.userId) 
+        query.set('password',this.new )
+        query.save().then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+        router.push({
+          uri: '/Me'
+        })
+
+      }else{
+        prompt.showDialog({
+            title: ' 提 示 信 息 :',
+            message: '您输入的新密码与旧密码相同，请重新输入！',
+            buttons: [
+              {
+                text: '确定',
+              }
+            ],
+            //autocancel: false, // 值为false时点击遮罩不关闭对话框，默认为true
+            success: function (ret) {
+              console.log(ret)
+            },
+            cancel: function () {
+
+            }
+          })
+      }
+    }else{
+      prompt.showDialog({
+            title: ' 提 示 信 息 :',
+            message: '您输入的旧密码有误，请重新输入！',
+            buttons: [
+              {
+                text: '确定',
+              }
+            ],
+            //autocancel: false, // 值为false时点击遮罩不关闭对话框，默认为true
+            success: function (ret) {
+              console.log(ret)
+            },
+            cancel: function () {
+
+            }
+          })
+    }
+    
+  },
+  getnew(e){
+    this.new=e.value
+  },
+  getold(e){
+    this.old2=e.value
+  },
+  onInit() {
+    this.get_message()
+  },
+  get_message(){
+    //bmob云后端的代码
+    const query = this.$app.$def.bmob.Query('User')
+    query.equalTo('objectId','==', this.$app.$def.userId)
+    query.find().then(res=>{
+      
+      this.old1=res[0].password,
+      console.log('5555555555'+this.old1)
+      console.log('53333333'+res[0].password)
+    }).catch(function (error) {
+      console.log(error)
+    })
+
+  },
+}
+
+</script>
+<style>
+  #demo{ 
+
+    flex-direction: column;
+  }
+   
+  #body{
+        /* 设置主轴和副轴都为居中对齐 */
+        /* justify-content: center;
+        align-items:flex-start; */
+        flex-direction: column;
+        width: 750px;
+        height: 100%;
+        margin-top: 30px;
+    }
+    .home_page {
+        flex-direction: column;
+    }
+    .logo{
+      height: 100px;
+      width: 750px;
+      border-bottom-width: 1px;
+      border-bottom-color: #d8d5d5;
+      margin-left: 20px;
+    }
+    .logo text{
+      font-size: 30px;
+    }
+    #change{
+        text-align: center;
+        margin-left: 250px;
+        margin-top: 200px;
+        font-size: 40px;
+        background-color: #ffe4c4;
+        border-radius: 10px;
+        width: 250px;
+        height: 100px;
+    }
+</style>
+

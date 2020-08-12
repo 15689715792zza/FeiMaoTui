@@ -1,0 +1,169 @@
+<template>
+  <div id="demo">
+    <div id="touxiang_bg">
+            <div id="touxiang">
+                <image src="{{tsrc}}" onclick="change"></image>
+            </div>
+        </div>  
+      <div id="body">
+            <div class="logo" onclick="xinxi">
+              <image src="../../Common/image/login.png" id="image_user"></image>
+              <text>基本信息</text>
+            </div>
+            <div class="logo" onclick="fabu">
+              <image src="../../Common/image/login.png" id="image_user"></image>
+              <text>我的发布</text>
+            </div>
+            <div class="logo" onclick="jiedan">
+              <image src="../../Common/image/login.png" id="image_user"></image>
+              <text>我的接单</text>
+            </div>
+            <div class="logo" onclick="changepassword">
+              <image src="../../Common/image/login.png" id="image_user"></image>
+              <text>修改密码</text>
+            </div>
+            <div class="logo" onclick="tuichu">
+              <image src="../../Common/image/login.png" id="image_user"></image>
+              <text>退出登录</text>
+            </div>
+            
+        </div>   
+    </div>
+</template>
+<script>
+import prompt from '@system.prompt'
+import router from '@system.router'
+import webview from '@system.webview'
+export default {
+  data: {
+    tsrc:'../Common/logo.png'
+  },
+  onInit() {
+    this.get_photo()
+  },
+  get_photo(){
+    //bmob云后端的代码
+     console.log(this.$app.$def.userId)
+    const query = this.$app.$def.bmob.Query('User')
+    query.equalTo('objectId','==', this.$app.$def.userId)
+    query.find().then(res=>{
+      this.tsrc=res[0].touxiang.url,
+      console.log('999999999999'+res[0].touxiang.url)
+    }).catch(function (error) {
+      console.log(error)
+    })
+
+  },
+  xinxi () {
+    router.push({
+      uri: '/Me'
+    })  
+  },
+  fabu () {
+    router.push({
+      uri: '/Ask'
+    })  
+  },
+  jiedan () {
+    router.push({
+      uri: '/Help'
+    })  
+  },
+  changepassword(){
+    router.push({
+      uri: '/ChangePassword'
+    })  
+  },
+  tuichu () {
+    router.push({
+      uri: '/Login'
+    })  
+  },
+//   change(){
+//     // prompt.showDialog({
+//     //   buttons: [
+//     //     {
+//     //       text: '更换头像',
+//     //     }
+//     //   ],
+//     // })
+//     prompt.showContextMenu({
+//       itemList: ['从相册选择头像', '查看头像','取消'],
+//       itemColor: '#ff33ff',
+// //   success: function() {
+// //      webview.loadUrl({
+// //   url: this.tsrc,
+// //   allowthirdpartycookies: true
+// // })
+// //   },
+//       success: function() {
+//       },
+//       cancel: function() {
+//         console.log('handling cancel')
+//       },
+//     })
+//   } 
+}
+
+</script>
+<style>
+  #demo{ 
+
+    flex-direction: column;
+  }
+  #body{
+    justify-content: center;
+    flex-direction: column;
+    width: 700px;
+    height: 300px;
+
+    margin-top: 30px
+  }
+   #touxiang_bg{
+        justify-content: center;
+        align-items: center;
+        background-image: url("../../Common/image/bg1.jpg");
+        width: 750px;
+        height: 300px;
+    }
+    #touxiang{
+        width: 150px;
+        height: 150px;
+        border:1px solid #ffffff;
+        border-radius: 150px;
+    }
+     .logo{
+      height: 100px;
+      width: 200px;
+    }
+    #image_user{
+      position: relative;
+      
+      left: -20px;
+      width: 50px;
+      height: 50px;
+    }
+    #body{
+        /* 设置主轴和副轴都为居中对齐 */
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 750px;
+        height: 500px;
+        margin-top: 100px;
+    }
+    .logo{
+      justify-content: center;
+      align-items: center;
+      width: 750px;
+    }
+    .home_page {
+        flex-direction: column;
+    }
+    .buttons{
+      justify-content:flex-end;
+      text-align: center;
+    }
+    
+</style>
+

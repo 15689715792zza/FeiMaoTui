@@ -1,0 +1,99 @@
+<import name="helpOthers" src="./helpOthers"></import>
+<import name="Information" src="./Information"></import>
+<template>
+<tabs id="tabs" class="doc-page">
+  <!-- tab-content -->
+  <tab-content id="tabContent">
+    <div class="page">
+      <!-- 主体内容 -->
+      <refresh class="content">
+       <helpOthers ></helpOthers>
+      </refresh>
+    </div>
+
+    <div class="page">
+      <refresh class="content">
+        <text>{{key}}</text>
+      </refresh>
+    </div>
+
+    <div class="page">
+      <refresh class="content">
+        <Information></Information>
+      </refresh>
+    </div>
+
+  </tab-content>
+
+  <!-- tab-bar -->
+  <tab-bar id="tabBar">
+    <div class="tab-bar-item" for="tabBarData">
+      <image class="tab-bar-image" src="{{$item.image}}"></image>
+      <text class="tab-bar-text">{{$item.text}}</text>
+    </div>
+  </tab-bar>
+</tabs>
+</template>
+
+<script>
+export default {
+  private: {
+    tabBarData: [
+      {
+        image: './img/help_him.jpg',
+        text: '帮人代取'
+      },{
+        image: './img/help_me.jpg',
+        text: '帮我取件'
+      },{
+        image: './img/me.jpg',
+        text: '我的信息'
+      }
+    ],
+    navData: [
+    ]
+  },
+  onInit () {
+    console.info('key: ' + this.key)
+  }
+}
+</script>
+
+<style>
+
+
+  .color-white {
+    color: #ffffff;
+    placeholder-color: #ffffff;
+  }
+  .icon-normal {
+    flex-shrink: 0;
+    object-fit: contain;
+    width: 50px;
+    height: 50px;
+  }
+  #tabs {
+    flex-direction: column;
+  }
+  #tabContent {
+    flex: 1;
+  }
+  .page {
+    flex: 1;
+    flex-direction: column;
+  }
+ 
+  .tab-bar-item {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+  }
+  .tab-bar-image {
+    width: 80px;
+    height: 60px;
+    object-fit: contain;
+  }
+  .tab-bar-text:active {
+    color: #0faeff;
+  }
+</style>

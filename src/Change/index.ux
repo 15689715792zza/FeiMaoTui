@@ -1,0 +1,141 @@
+<template>
+  <div id="demo">
+      <div id="body">
+            <div class="logo" >
+              <text>姓名:</text>
+              <input value="{{name}}" onchange="getname"></input>
+            </div>
+            <div class="logo" >
+              <text>学号:</text>
+              <input value="{{classId}}" onchange="getuser"></input>
+            </div>
+            <div class="logo" >
+              <text>手机号:</text>
+              <input value="{{ip}}" onchange="getip"></input>
+            </div>
+            <div class="logo" >
+              <text>性别:</text>
+              <input value="{{sex}}" onchange="getsex"></input>
+            </div>
+            <text id="change" onclick="change">保存</text>
+        </div>   
+    </div>
+</template>
+<script>
+import prompt from '@system.prompt'
+import router from '@system.router'
+export default {
+  private: {
+    name:'',
+    classId:'',
+    ip:'',
+    sex:''
+  },
+  onInit() {
+    this.get_message()
+  },
+  getname(e){
+    this.name = e.value
+  },
+  getuser(e){
+    this.classId = e.value
+  },
+  getip(e){
+    this.ip = e.value
+  },
+  getsex(e){
+    this.sex = e.value
+  },
+  get_message(){
+    //bmob云后端的代码
+    console.log('------------'+this.$app.$def.userId)
+    const query = this.$app.$def.bmob.Query('User')
+    query.equalTo('objectId','==', this.$app.$def.userId)
+    query.find().then(res=>{
+      
+      this.name=res[0].name,
+      this.classId=res[0].username,
+      this.ip=res[0].phonenumber,
+      this.sex=res[0].sex,
+      console.log(res)
+    }).catch(function (error) {
+      console.log(error)
+    })
+  },
+  change(){
+    //bmob云后端的代码
+    // console.log('------------'+this.$app.$def.userId)
+    const query = this.$app.$def.bmob.Query('User')
+    // query.equalTo('objectId','==', this.$app.$def.userId)
+    // query.find().then(res=>{
+    //   console.log('aaaaaaaaa'+res[0].sex)
+    //   console.log('nnnnnnnnn'+this.ip)
+    //   res.set('name', this.name) //需要修改的objectId
+    //   res.set('username', parseInt(this.classId))
+    //   res.set('phonenumber', parseInt(this.ip))
+    //   res.set('sex', this.sex)
+    //   res.save()
+    //   console.log(res)
+    // }).catch(err => {
+    //   console.log(err)
+    // })
+    // router.push({
+    //   uri: '/Me'
+    // })
+    query.set('id', this.$app.$def.userId) 
+    query.set('name',this.name )
+    query.set('username',parseInt(this.classId) )
+    query.set('phonenumber',parseInt(this.ip) )
+    query.set('sex',this.sex)
+    query.save().then(res => {
+      console.log(res)
+    }).catch(err => {
+      console.log(err)
+    })
+    router.push({
+      uri: '/Me'
+    })
+  }
+}
+
+</script>
+<style>
+  #demo{ 
+
+    flex-direction: column;
+  }
+   
+  #body{
+        /* 设置主轴和副轴都为居中对齐 */
+        /* justify-content: center;
+        align-items:flex-start; */
+        flex-direction: column;
+        width: 750px;
+        height: 100%;
+        margin-top: 30px;
+    }
+    .home_page {
+        flex-direction: column;
+    }
+    .logo{
+      height: 100px;
+      width: 750px;
+      border-bottom-width: 1px;
+      border-bottom-color: #d8d5d5;
+      margin-left: 20px;
+    }
+    .logo text{
+      font-size: 30px;
+    }
+    #change{
+        text-align: center;
+        margin-left: 250px;
+        margin-top: 200px;
+        font-size: 40px;
+        background-color: #ffe4c4;
+        border-radius: 10px;
+        width: 250px;
+        height: 100px;
+    }
+</style>
+

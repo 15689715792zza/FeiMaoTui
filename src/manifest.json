@@ -1,0 +1,85 @@
+{
+  "package": "com.example.demo",
+  "name": "飞毛腿",
+  "versionName": "1.0.0",
+  "versionCode": "1",
+  "minPlatformVersion": "1020",
+  "icon": "/Common/logo.png",
+  "features": [
+    {
+      "name": "system.sms"
+    },
+    {
+      "name": "system.prompt"
+    },
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.shortcut"
+    },
+    {
+      "name": "system.fetch"
+    },
+    {
+      "name": "system.storage"
+    }
+  ],
+  "permissions": [
+    {
+      "origin": "*"
+    }
+  ],
+  "config": {
+    "logLevel": "off"
+  },
+  "router": {
+    "entry": "Login",
+    "pages": {
+
+      "Login": {
+        "component": "index"
+      },
+      "NewManRegister": {
+        "component": "index"
+      },
+      "FindPassword": {
+        "component": "index"
+      },
+      "Ask": {
+        "component": "index"
+      },
+      "Help": {
+        "component": "index"
+      },
+      "Me": {
+        "component": "index"
+      },
+      "ChangePassword": {
+        "component": "index"
+      },
+      "Main": {
+        "component": "Main_Detail/index"
+      },
+      "Findpassword/FindPassword_Detail": {
+        "component": "index"
+      },
+      "Change": {
+        "component": "index"
+      }
+    }
+  },
+  "display": {
+    "textSizeAdjust": "auto",
+    "backgroundColor": "#fbf9fe",
+    "titleBar": true,
+    "titleBarBackgroundColor": "#0faeff",
+    "titleBarTextColor": "#ffffff",
+    "pages": {
+
+      "Login": {
+        "titleBarText": "飞 毛 腿 登 录"
+      }
+    }
+  }
+}

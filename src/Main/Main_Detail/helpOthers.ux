@@ -1,0 +1,115 @@
+<template>
+  <div id="demo">
+          <!-- 顶部搜索栏 -->
+      <div class="title-bar">
+        <div class="search-wrap">
+          <image class="icon-normal" src="../img/template-search.png"></image>
+          <input class="search-input color-white" type="text" placeholder="搜索"></input>
+        </div>
+      </div>
+    <text style="color:#ff0000;">他人快递信息，采用自定义组件</text>
+    <list>
+      <block for="message">
+        <list-item type="pro" id="li">
+            <div id="body">
+              <text>酬金:{{$item.money}}￥</text>
+              <text>包裹大小:{{$item.type}}</text>
+              <text>取货地址:{{$item.get_address}}</text>
+              <text>订单状态:{{$item.status}}</text>
+            </div>
+        </list-item>
+      </block>
+    </list>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data: {
+    message:[]
+  },
+  onInit() {
+    this.get_message()
+  },
+  get_message() {
+    const query = this.$app.$def.bmob.Query('expressInformation')
+    //默认顺序将价钱降序排列
+    query.order('-money')
+    //通过回调函数从数据库拿取数据
+    query.find().then(res => {
+      // console.log(res)
+      for(let i=0;i<res.length;i++){
+        this.message.push({
+          money:res[i].money,
+          type:res[i].type,
+          get_address:res[i].get_address,
+          status:res[i].status
+        })
+      }
+
+    })
+  }
+}
+
+</script>
+<style>
+  #demo{ 
+
+    flex-direction: column;
+  }
+  #body{
+    justify-content: center;
+    flex-direction: column;
+    width: 700px;
+    height: 300px;
+    border: 3px solid #000000;
+    margin-top: 30px
+  }
+  #li{
+    justify-content: center;
+  }
+  .color-white {
+    color: #ffffff;
+    placeholder-color: #ffffff;
+  }
+  .icon-normal {
+    flex-shrink: 0;
+    object-fit: contain;
+    width: 50px;
+    height: 50px;
+  }
+  #tabs {
+    flex-direction: column;
+  }
+  #tabContent {
+    flex: 1;
+  }
+  .title-bar {
+    flex-shrink: 0;
+    height: 100px;
+    padding: 20px 30px;
+    background-color: #333333;
+  }
+  .content {
+    flex-shrink: 0;
+    justify-content: center;
+  }
+  .search-wrap {
+    margin: 0 30px;
+    width: 600px;
+    padding: 10px;
+    border-bottom-color: #ffffff;
+    border-bottom-width: 1px;
+  }
+  .search-input {
+    margin-left: 10px;
+    font-size: 32px;
+  }
+  #tabBar {
+    height: 120px;
+    border-top-width: 1px;
+    border-top-color: #cccccc;
+    background-color: #ffffff;
+  }
+</style>
+

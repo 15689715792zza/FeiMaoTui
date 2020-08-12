@@ -1,0 +1,62 @@
+<template>
+    <div class="home_page">
+      <text style="color:#90b884;font-size:60px; font-weight:600;">忘 记 密 码?</text>
+      <div id="hr"></div>
+      <text id="select">请选择密码找回方式:</text>
+      <text class="find" onclick="phone_find">{{phone_find_ms}}</text>
+      <text class="find" onclick="email_find">{{email_find_ms}}</text>
+    </div>
+</template>
+
+<script>
+import prompt from '@system.prompt'
+import router from '@system.router'
+export default{
+  private: {
+    phone_find_ms: '>>>  手机短信验证找回  <<<',
+    email_find_ms: '>>>    邮箱验证找回    <<<'
+  },
+  phone_find(){
+    router.push({
+      uri: 'Findpassword/FindPassword_Detail'
+    }) 
+  },
+  email_find(){
+    prompt.showToast({
+      message: '该功能正在开发。。。',
+      duration: 2000,
+      gravity: 'center'
+    })
+  }
+}
+</script>
+
+<style>
+ 
+  .home_page{
+    flex-direction: column;
+ 
+  }
+  #hr{
+    margin-top: 20px;
+    width: 600px;
+    border: 3px solid  #707070;
+  }
+  #select{
+    font-size: 35px;
+    margin-left: 30px;
+    color: rgb(8, 8, 8);
+    font-family: '宋体';
+    font-weight:700;
+    margin-top: 50px;
+  }
+  .find{
+    border-radius: 10px;
+    text-align: center;
+    margin-left: 50px;
+    margin-top: 50px;
+    width: 500px;
+    height: 80px;
+    background-image: url(../Common/image/find_bg.png);
+  }
+</style>

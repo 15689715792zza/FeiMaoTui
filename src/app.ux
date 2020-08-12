@@ -1,0 +1,8 @@
+<script>
+import Bmob from './js/Bmob-1.6.3.min.js'
+Bmob.initialize('2311dc13e55fe891dfb3f610ad57cc0a', '04a319581b2f7678a07ad2ae33565075')
+export default {
+  bmob: Bmob,
+  userId:String
+}
+</script>

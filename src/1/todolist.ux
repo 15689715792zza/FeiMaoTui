@@ -1,0 +1,78 @@
+<template>
+  <div class="todo-list">
+    <div class="wrap" onclick="changeState">
+      <div class="checkout-wrap">
+        <div class="check" show="{{isChecked}}"></div>
+      </div>
+    </div>
+    <text class="item" style="{{ {textDecoration: textDecoration} }}">{{content}}</text>
+  </div>
+</template>
+
+<script>
+  export default {
+    // 定义父子组件通信数据
+    props: {
+      isChecked: {
+        default: false
+      },
+      content: String,
+      textDecoration: {
+        default: 'none'
+      }
+    },
+    changeState () {
+      // 触发父组件事件
+      this.$emit('changeState')
+    }
+  }
+</script>
+
+<style>
+  .todo-list {
+    align-items: center;
+    width: 100%;
+    height: 100px;
+    background-color: #fff;
+    border: 0px solid #e0e0e0;
+    border-bottom-width: 1px;
+  }
+
+  .wrap {
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 100px;
+    border: 0px solid #e0e0e0;
+    border-right-width: 1px;
+  }
+
+  .checkout-wrap {
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #333;
+    border-radius: 3px;
+  }
+
+  .check {
+    width: 10px;
+    height: 20px;
+    border: 1px solid #333;
+    border-left-width: 0;
+    border-top-width: 0;
+    transform: rotate(40deg)
+  }
+
+  .item {
+    height: 100px;
+    margin-left: 10px;
+    padding: 20px;
+    color: #333;
+    border: 0px solid #e0e0e0;
+    border-left-width: 1px;
+    lines: 1;
+    text-overflow: ellipsis;
+  }
+</style>

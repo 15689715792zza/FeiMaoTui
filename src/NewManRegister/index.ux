@@ -1,0 +1,348 @@
+<template>
+    <div class="home_page">
+        <div id="touxiang_bg">
+            <div id="show_zhuce"><text>注册</text></div>
+            <div id="touxiang">
+                <image src="{{touxiang_src}}"></image>
+            </div>
+            <div id="radio_css">
+              <label target="radio1">男生</label>
+                <!-- 单选框的姓名属性必须弄成一致才能识别是一体的单选框，否则单选框的功能无效 -->
+              <input type="radio" id="radio1" value="man" name="radio" checked="true" style="margin-left:10px" onchange="change_touxiang"></input>
+              <label target="radio2" style="margin-left:30px">女生</label>
+              <input type="radio" id="radio2" value="woman" name="radio" style="margin-left:10px" onchange="change_touxiang"></input>
+            </div>
+        </div>
+        <div id="body">
+            <input type="number"  placeholder="请 输 入 学 号" class="message" value="{{student_num}}" onchange="get_student_num" maxlength="12"></input>
+            <text show="{{show_stu_message}}" class="show">{{show_stu_information}}</text>
+            <input type="text" placeholder="请 输 入姓 名" class="message" value="{{name}}" onchange="get_name" maxlength="6"></input>
+            <text show="{{show_name_message}}" class="show">{{show_name_information}}</text>
+            <input type="password"  placeholder="请 输 入 8 位 密 码" class="message" value="{{opassword}}" onchange="get_opassword" maxlength="8"></input>
+            <input type="password"  placeholder="请 确 认 密 码" class="message" value="{{npassword}}" onchange="get_npassword" maxlength="8"></input>
+            <text show="{{show_password_message}}" class="show">{{show_password_information}}</text>
+            <div>
+                <input type="number" placeholder="请输入手机号" id="get_num" value="{{phone_num}}" onchange="get_phoneNumber" maxlength="11"></input>
+                <input type="button" value="{{get_erweima}}"  class="input-btn {{btn_class}}"  onclick="sendVerification" disabled="{{btn_class=='disabled'}}"></input>
+            </div>
+            <!-- <text show="{{show_phone_message}}" class="show">请输入手机号！</text> -->
+            <input type="number" placeholder="请输入短信验证码" class="message" value="{{ma}}" onchange="get_ma" maxlength="6"></input>
+            <text show="{{show_ma_message}}" class="show">请输入短信验证码！</text>
+            <input type="button" value="注 册" id="register" onclick="check_ma" ></input>
+        </div>
+    </div>
+
+</template>
+
+<script>
+import router from '@system.router'
+import prompt from '@system.prompt'
+export default {
+  private: {
+    student_num: '',
+    name: '',
+    sex:'man',
+    touxiang_src:'../Common/image/man_tou.jpg',
+    opassword: '',
+    npassword: '',
+    phone_num: '',
+    get_erweima: '获取验证码',
+    ma:'',
+    check_rules: false,
+    show_stu_information:'',
+    show_name_information:'',
+    show_password_information:'',
+    show_stu_message: false,
+    show_name_message: false,
+    show_password_message: false,
+    show_phone_message:false,
+    show_ma_message:false,
+    btn_class: 'disabled',
+    second:0
+  },
+  // 动态获取输入框的内容
+  get_student_num(e){
+    this.student_num = e.value
+  },
+  get_name(e){
+    this.name = e.value
+  },
+  get_sex(e){
+    this.sex = e.value
+  },
+  get_opassword(e){
+    this.opassword = e.value
+  },
+  get_npassword(e){
+    this.npassword = e.value
+  },
+  get_phoneNumber(e){
+    //电话号码有改变时就调用校验方法
+    this.phone_num = e.value
+    this.check_phoneNumber()
+  },
+  get_ma(e){
+    this.ma = e.value
+  },
+  change_touxiang(e){
+    this.sex = e.value
+    if(this.sex=='man'){
+      this.touxiang_src = '../Common/image/man_tou.jpg'
+    }else{
+      this.touxiang_src = '../Common/image/woman_tou.jpg'
+    }
+    console.log(e.value)
+  },
+  // 校验各类信息的准确性
+  check_studentNum(){
+    if (this.student_num==''){
+      this.show_stu_information = '请输入学号！'
+      this.show_stu_message = true
+      this.check=false
+    }else{
+    // 如果学号（用户名）的长度等于12并且不为空则返回true，否则返回false显示提示信息
+      if (this.student_num.length == 12 && this.get_student_num.length!='') {
+        this.show_stu_message = false
+        this.check =true
+      }else{
+        this.show_stu_information = '输入有误请重新输入12位学号！'
+        this.show_stu_message = true
+        this.check=false
+      }
+    }
+    return this.check
+  },
+  check_name(){
+    if(this.name==''){
+      this.show_name_information='请输入姓名！'
+      this.show_name_message = true
+      this.check = false
+    }else{
+      if(this.name != '' && this.name.length>=2){
+        this.show_name_message = false
+        this.check = true
+      }else{
+        this.show_name_information='姓名输入有误！'
+        this.show_name_message = true
+        this.check = false
+      }
+    }
+    return this.check
+  },
+  check_password(){
+    if(this.opassword==''||this.npassword==''){
+      this.show_password_information='请输入密码！'
+      this.show_password_message=true
+      this.check = false
+    }else{
+      if(/^[0-9A-Za-z]/.test(this.opassword)&&this.opassword.length==8){
+        if(this.opassword == this.npassword){
+          this.show_password_message =false
+          this.check = true
+        }else{
+          this.show_password_information='两次密码输入不一致！'
+          this.show_password_message=true
+          this.check = false
+        }
+      }else{
+        this.show_password_information='密码格式错误，请重新输入8位数密码！'
+        this.show_password_message=true
+        this.check = false
+      }
+    }
+    return this.check
+  },
+  check_phoneNumber(){
+    if(this.phone_num!='' && /^1[345789]\d{9}$/.test(this.phone_num)){
+      this.btn_class = ''
+    }else{
+      this.btn_class = 'disabled'
+    }
+  },
+  //注册方法依靠
+  check_ma(){
+    let data_this = this
+    // 如果学号，姓名，密码都符合规则，则可以才能进行验证码校验！
+    if(data_this.rules()){
+      if(data_this.ma==''){
+        data_this.show_ma_message = true
+      //不为空进行判断
+      }else{
+        let smsCode = data_this.ma
+        let data = {
+          mobilePhoneNumber:data_this.phone_num
+        }
+        //这个地方我用的是bmob云后台的代码 
+        data_this.$app.$def. bmob.verifySmsCode(smsCode, data).then(function (response) {
+          // 验证码校验正确则可以提交注册信息
+          data_this.put_message()
+          console.log(response)
+        
+        }).catch(function (error) {
+          console.log(error)
+          prompt.showToast({
+            message: '验证码错误',
+            duration: 2000,
+            gravity: 'center'
+          })
+        })
+
+      }
+    }
+
+  },
+  //发送短信验证码
+  sendVerification () {
+    const self = this
+    // 发送验证码
+    if (!self.btn_class) {
+      let params = {
+        mobilePhoneNumber: this.phone_num
+      }
+      this.$app.$def. bmob.requestSmsCode(params).then(function (response) {
+        console.log(response)
+      }).catch(function (error) {
+        console.log(error)
+      })
+      self.second = 60
+      self.btn_class = 'disabled'
+      self.intervalID = setInterval(self.count.bind(self), 1000)
+    }
+  },
+  count () {
+    const self = this
+    // 计时器，计时结束后，允许发送验证码
+    --self.second
+    self.get_erweima = self.second + 's'
+    if (self.second === 0){
+      clearInterval(self.intervalID)
+      self.btn_class = ''
+      self.get_erweima = '获取验证码'
+    }
+  },
+  rules(){
+    this.check_rules = this.check_studentNum()
+    this.check_rules = this.check_name()
+    this.check_rules = this.check_password()
+    // this.check_rules = this.check_ma()
+    return this.check_rules 
+  },
+  // 提交注册信息
+  put_message(){
+    const query =this.$app.$def.bmob.Query('User')
+    query.set('username',parseInt(this.student_num))
+    query.set('name',this.name)
+    query.set('password',this.opassword)
+    query.set('phonenumber',parseInt(this.phone_num))
+    query.save().then(res => {
+      console.log('创建的用户id为：'+res.objectId)
+      router.push({
+        uri: '/Login'
+      })
+      prompt.showToast({
+        duration: 2000,
+        gravity: 'center',
+        message: '注册成功！'
+      })
+    }).catch(err => {
+      prompt.showToast({
+        duration: 2000,
+        gravity: 'center',
+        message: '注册失败，用户名已存在！'
+      })
+    })
+    
+
+  }
+
+} 
+
+</script>
+
+<style>
+     .home_page {
+        flex-direction: column;
+    }
+     #touxiang_bg{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color:#e9967a;
+        width: 750px;
+        height: 500px;
+    }
+    #radio_css{
+      margin-top: 50px
+    }
+    #show_zhuce{
+        position: absolute;
+        top: 100px;
+        left: 80px;
+    }
+    #show_zhuce text{
+        color:#ffffff;
+        font-size: 35px;
+    }
+    #touxiang{
+        width: 150px;
+        height: 150px;
+
+    }
+    #touxiang image{
+      border-radius: 50%
+    }
+    .show{
+        font-family: '楷体';
+        font-size: 25px;
+        color: #ff0000;
+    }
+    #body{
+        /* 设置主轴和副轴都为居中对齐 */
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+    }
+    .message{
+        border: 3px solid #000000;
+        border-radius: 10px;
+        margin-top: 30px;
+        width: 400px;
+        height: 50px;
+    }
+    .message:focus{
+      border: 3px solid #1a1ddd;
+    }
+    #get_num {
+        border: 3px solid #000000;
+        border-radius: 10px;
+        margin-top: 30px;
+        width: 250px;
+        height: 50px;
+        margin-right: 20px
+    }
+    #get_num:focus{
+       border: 3px solid #1a1ddd;
+    }
+    .input-btn{
+        border-radius: 10px;
+        background-color: #0faeff;
+        color: #ffffff;
+        width: 200px;
+        height: 50px;
+        margin-top: 30px
+        
+    }
+    #register{
+        font-size: 50px;
+        border-radius: 10px;
+        background-color: #d2691e;
+        width: 200px;
+        margin-top: 80px
+      
+    }
+    .disabled {
+      background-color: #999999;
+    }
+  
+</style>
